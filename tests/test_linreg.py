@@ -2,7 +2,7 @@
 from foundations.linreg import make_data, train
 
 def test_learns_true_params():
-    x,y = make_data():
+    x,y = make_data()
     # more epochs here
     w,b, _ = train(x,y, lr=0.01, epochs=5000)
 
