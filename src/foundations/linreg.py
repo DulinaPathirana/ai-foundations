@@ -20,7 +20,7 @@ def make_data(n: int = 100, seed: int = 0) -> tuple[np.ndarray, np.ndarray]:
 # lr is the learning rate
 # epochs the is the number of repeititions of the training process
 def train(x: np.ndarray, y:np.ndarray, lr: float = 0.01, epochs: int = 1000):
-    w, b= 0, 0 # start the model at 0,0 
+    w, b= 100, -50 # start the model at 100, -50
     n= len(x) # number of data points
     losses=[] # list to hold the loss values for each epoch
 
@@ -67,6 +67,9 @@ if __name__ == "__main__":
 
     # right plot, loss vs epoch
     ax2.plot(losses)
+    ax2.set_yscale("log")          # each gridline = 10x
+    ax2.set_xlabel("epoch")
+    ax2.set_ylabel("MSE")
     ax2.set_title("Loss over Training")
 
     plt.savefig("fit.png", dpi=120)
