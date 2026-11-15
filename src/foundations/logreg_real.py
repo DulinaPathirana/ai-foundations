@@ -74,4 +74,4 @@ print(f"sum = {tp+fn+fp+tn}")
 
 probs = sigmoid(X_test_n @w +b)
 fn_mask = (y_test==0) & (y_pred==1)
-print (probs[fn_mask])
+print (probs[fn_mask]) 
