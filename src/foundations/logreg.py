@@ -34,7 +34,7 @@ def cross_entropy(p: np.ndarray, y: np.ndarray) -> float:
     return -np.mean(y*np.log(p) + (1-y)*np.log(1 - p))
 
 # =====================Train_the_model========================
-def train(X: np.ndarray, y: np.ndarray, lr: float = 0.1, epochs: int = 5000):
+def train(X: np.ndarray, y: np.ndarray, lr: float = 0.1, epochs: int = 3000):
     n, d = X.shape # n students, d features
     w= np.zeros(d) # start with weight 0
     b = 0.0 # bias 0
@@ -63,13 +63,23 @@ def predict(X: np.ndarray, w: np.ndarray, b: float) -> np.ndarray:
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    X_train, y_train= make_data(n=30, seed=0) # generate the data
+    X_train, y_train= make_data(n=30000, seed=0) # generate the data
     X_test, y_test = make_data(n=3000, seed=1)
-    w, b, losses = train(X_train, y_train) # train the model
 
-    train_acc = np.mean(predict(X_train, w, b) == y_train)
-    test_acc = np.mean(predict(X_test, w, b) == y_test)
-    print(f"w = {w[0]:.2f}, b = {b:.2f}")
+    # statistics from TRAINING data only
+    mu, sigma = X_train.mean(axis=0), X_train.std(axis=0)
+
+    X_train_norm = (X_train - mu)/ sigma
+    X_test_norm = (X_test - mu) / sigma
+
+    w, b, losses = train(X_train_norm, y_train) # train the model
+
+    w_real = w/sigma
+    b_real = b-np.sum(w*mu/sigma)
+
+    train_acc = np.mean(predict(X_train_norm, w, b) == y_train)
+    test_acc = np.mean(predict(X_test_norm, w, b) == y_test)
+    print(f"w_real = {w_real[0]:.2f}, b_real = {b_real:.2f}")
     print(f"train accuracy = {train_acc:.1%}, test accuracy = {test_acc:.1%}")
 
     # plot: dots are the students, curve is the probability learned
@@ -77,7 +87,7 @@ if __name__ == "__main__":
 
     ax1.scatter(X_train[:,0], y_train, s=10, alpha=0.5)# X[:, 0] = the hours column
     xs = np.linspace(0,10,200).reshape(-1,1)# smooth range of hours, as (200, 1)
-    ax1.plot(xs, sigmoid(xs @ w + b), color="red")      # learned S-curve
+    ax1.plot(xs, sigmoid(xs @ w_real + b_real), color="red")      # learned S-curve
     ax1.axhline(0.5, linestyle="--", color="gray")      # decision threshold
     ax1.set_xlabel("hours studied")
     ax1.set_ylabel("P(pass)")
