@@ -7,7 +7,7 @@ def sigmoid(z: np.ndarray) -> np.ndarray:
     return 1/(1+np.exp(-z))
 
 # =====================Fake_Data========================
-def make_data(n: int = 300, seed: int = 100) -> tuple[np.ndarray, np.ndarray]:
+def make_data(n: int = 30, seed: int = 100) -> tuple[np.ndarray, np.ndarray]:
     rng = np.random.default_rng(seed)
 
     # hours studied for each student between 0 and 10
