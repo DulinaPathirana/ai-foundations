@@ -10,5 +10,6 @@ def test_learns_true_params():
 
     #assert = this must be true if nore the test fails
     #abs(w-3)<0.2 means the w is withing 0.2 of the true value 3
+    true_w = np.array([3.0, -1.0, 2.0])
     assert np.allclose(w, true_w, atol=0.2) # check if all weights are close to true weights
     assert abs(b-2)<0.3 # b is a bit noiser to learn therefore looser tolerance
