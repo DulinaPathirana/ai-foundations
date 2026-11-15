@@ -7,7 +7,7 @@ def sigmoid(z: np.ndarray) -> np.ndarray:
     return 1/(1+np.exp(-z))
 
 # =====================Fake_Data========================
-def make_data(n: int = 30, seed: int = 100) -> tuple[np.ndarray, np.ndarray]:
+def make_data(n: int = 300, seed: int = 100) -> tuple[np.ndarray, np.ndarray]:
     rng = np.random.default_rng(seed)
 
     # hours studied for each student between 0 and 10
@@ -63,16 +63,19 @@ def predict(X: np.ndarray, w: np.ndarray, b: float) -> np.ndarray:
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    X, y= make_data() # generate the data
-    w, b, losses = train(X,y) # train the model
+    X_train, y_train= make_data(n=30, seed=0) # generate the data
+    X_test, y_test = make_data(n=3000, seed=1)
+    w, b, losses = train(X_train, y_train) # train the model
 
-    acc= np.mean(predict(X,w,b)==y)
-    print(f"w= {w[0]:.2f}, b= {b:.2f}, accuracy = {acc:.1%}")
+    train_acc = np.mean(predict(X_train, w, b) == y_train)
+    test_acc = np.mean(predict(X_test, w, b) == y_test)
+    print(f"w = {w[0]:.2f}, b = {b:.2f}")
+    print(f"train accuracy = {train_acc:.1%}, test accuracy = {test_acc:.1%}")
 
     # plot: dots are the students, curve is the probability learned
     fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,4))
 
-    ax1.scatter(X[:,0], y, s=10, alpha=0.5)# X[:, 0] = the hours column
+    ax1.scatter(X_train[:,0], y_train, s=10, alpha=0.5)# X[:, 0] = the hours column
     xs = np.linspace(0,10,200).reshape(-1,1)# smooth range of hours, as (200, 1)
     ax1.plot(xs, sigmoid(xs @ w + b), color="red")      # learned S-curve
     ax1.axhline(0.5, linestyle="--", color="gray")      # decision threshold
