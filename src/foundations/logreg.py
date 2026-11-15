@@ -56,8 +56,8 @@ def train(X: np.ndarray, y: np.ndarray, lr: float = 0.1, epochs: int = 3000):
 
 # ====================Predict========================
 # Turns probabilities into hard 0/1 decisions using the 0.5 threshold.
-def predict(X: np.ndarray, w: np.ndarray, b: float) -> np.ndarray:
-    return (sigmoid(X@w+b)>0.5).astype(float)
+def predict(X: np.ndarray, w: np.ndarray, b: float, threshold:float ) -> np.ndarray:
+    return (sigmoid(X@w+b)>threshold).astype(float)
 
 # ====================Run=========================
 if __name__ == "__main__":
